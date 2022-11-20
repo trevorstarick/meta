@@ -4,7 +4,11 @@ import (
 	"io"
 )
 
-type MOOV struct{}
+type MOOV struct {
+	MVHD MVHD
+	TRAK TRAK
+	UDTA UDTA
+}
 
 func (m *MOOV) Parse(r io.ReadSeeker, l int) error {
 	for {
@@ -22,20 +26,17 @@ func (m *MOOV) Parse(r io.ReadSeeker, l int) error {
 
 		switch string(name) {
 		case "mvhd":
-			mvhd := &MVHD{}
-			err := mvhd.Parse(r, length)
+			err := m.MVHD.Parse(r, length)
 			if err != nil {
 				return err
 			}
 		case "trak":
-			trak := &TRAK{}
-			err := trak.Parse(r, length)
+			err := m.TRAK.Parse(r, length)
 			if err != nil {
 				return err
 			}
 		case "udta":
-			udta := &UDTA{}
-			err := udta.Parse(r, length)
+			err := m.UDTA.Parse(r, length)
 			if err != nil {
 				return err
 			}

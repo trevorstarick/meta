@@ -6,15 +6,23 @@ import (
 	"io"
 )
 
+type btoa [4]byte
+
+func (b btoa) String() string {
+	return string(b[:])
+}
+
 func GetAtom(r io.ReadSeeker) (int, []byte, error) {
 	var length int32
-	var name [4]byte
+	var name btoa
 
-	if err := binary.Read(r, binary.BigEndian, &length); err != nil {
+	err := binary.Read(r, binary.BigEndian, &length)
+	if err != nil {
 		return 0, nil, err
 	}
 
-	if err := binary.Read(r, binary.BigEndian, &name); err != nil {
+	err = binary.Read(r, binary.BigEndian, &name)
+	if err != nil {
 		return 0, nil, err
 	}
 

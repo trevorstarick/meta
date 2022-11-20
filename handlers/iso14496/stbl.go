@@ -4,7 +4,9 @@ import (
 	"io"
 )
 
-type STBL struct{}
+type STBL struct {
+	STSD STSD
+}
 
 func (s *STBL) Parse(r io.ReadSeeker, l int) error {
 	for {
@@ -22,32 +24,27 @@ func (s *STBL) Parse(r io.ReadSeeker, l int) error {
 
 		switch string(name) {
 		case "stsd":
-			stsd := &STSD{}
-			err := stsd.Parse(r, length)
+			err := s.STSD.Parse(r, length)
 			if err != nil {
 				return err
 			}
 		// case "stts":
-		// 	stts := &STTS{}
-		// 	err := stts.Parse(r, length)
+		// 	err := s.STTS.Parse(r, length)
 		// 	if err != nil {
 		// 		return err
 		// 	}
 		// case "stss":
-		// 	stss := &STSS{}
-		// 	err := stss.Parse(r, length)
+		// 	err := s.STSS.Parse(r, length)
 		// 	if err != nil {
 		// 		return err
 		// 	}
 		// case "stsc":
-		// 	stsc := &STSC{}
-		// 	err := stsc.Parse(r, length)
+		// 	err := s.STSC.Parse(r, length)
 		// 	if err != nil {
 		// 		return err
 		// 	}
 		// case "stsz":
-		// 	stsz := &STSZ{}
-		// 	err := stsz.Parse(r, length)
+		// 	err := s.STSZ.Parse(r, length)
 		// 	if err != nil {
 		// 		return err
 		// 	}

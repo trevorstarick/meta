@@ -3,21 +3,23 @@ package iso14496
 import (
 	"encoding/binary"
 	"io"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
 type HDLR struct {
 	Version               byte
 	Flags                 [3]byte
-	ComponentType         int32
-	ComponentSubType      int32
-	ComponentManufacturer int32
+	ComponentType         btoa
+	ComponentSubType      btoa
+	ComponentManufacturer btoa
 	ComponentFlags        int32
 	ComponentFlagsMask    int32
-	ComponentName         string
+	ComponentName         []byte
 }
 
 func (h *HDLR) Parse(r io.ReadSeeker, l int) error {
-	var buf [4]byte
+	var buf btoa
 
 	if err := binary.Read(r, binary.BigEndian, &buf); err != nil {
 		return err
@@ -48,7 +50,9 @@ func (h *HDLR) Parse(r io.ReadSeeker, l int) error {
 		return err
 	}
 
-	h.ComponentName = string(vbuf)
+	h.ComponentName = vbuf
+
+	spew.Dump(h)
 
 	return nil
 }

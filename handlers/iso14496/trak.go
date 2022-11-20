@@ -4,7 +4,11 @@ import (
 	"io"
 )
 
-type TRAK struct{}
+type TRAK struct {
+	TKHD TKHD
+	EDTS EDTS
+	MDIA MDIA
+}
 
 func (t *TRAK) Parse(r io.ReadSeeker, l int) error {
 	for {
@@ -22,20 +26,17 @@ func (t *TRAK) Parse(r io.ReadSeeker, l int) error {
 
 		switch string(name) {
 		case "tkhd":
-			tkhd := &TKHD{}
-			err := tkhd.Parse(r, length)
+			err := t.TKHD.Parse(r, length)
 			if err != nil {
 				return err
 			}
 		case "edts":
-			edts := &EDTS{}
-			err := edts.Parse(r, length)
+			err := t.EDTS.Parse(r, length)
 			if err != nil {
 				return err
 			}
 		case "mdia":
-			mdia := &MDIA{}
-			err := mdia.Parse(r, length)
+			err := t.MDIA.Parse(r, length)
 			if err != nil {
 				return err
 			}

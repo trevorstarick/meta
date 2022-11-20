@@ -4,9 +4,13 @@ import (
 	"io"
 )
 
-type MDIA struct{}
+type MDIA struct {
+	MDHD MDHD
+	HDLR HDLR
+	MINF MINF
+}
 
-func (u *MDIA) Parse(r io.ReadSeeker, l int) error {
+func (m *MDIA) Parse(r io.ReadSeeker, l int) error {
 	for {
 		length, name, err := GetAtom(r)
 		if err != nil {
@@ -22,20 +26,17 @@ func (u *MDIA) Parse(r io.ReadSeeker, l int) error {
 
 		switch string(name) {
 		case "mdhd":
-			mdhd := &MDHD{}
-			err := mdhd.Parse(r, length)
+			err := m.MDHD.Parse(r, length)
 			if err != nil {
 				return err
 			}
 		case "hdlr":
-			hdlr := &HDLR{}
-			err := hdlr.Parse(r, length)
+			err := m.HDLR.Parse(r, length)
 			if err != nil {
 				return err
 			}
 		case "minf":
-			minf := &MINF{}
-			err := minf.Parse(r, length)
+			err := m.MINF.Parse(r, length)
 			if err != nil {
 				return err
 			}

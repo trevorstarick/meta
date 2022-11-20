@@ -4,7 +4,9 @@ import (
 	"io"
 )
 
-type EDTS struct{}
+type EDTS struct {
+	ELST ELST
+}
 
 func (u *EDTS) Parse(r io.ReadSeeker, l int) error {
 	for {
@@ -22,8 +24,7 @@ func (u *EDTS) Parse(r io.ReadSeeker, l int) error {
 
 		switch string(name) {
 		case "elst":
-			elst := &ELST{}
-			err := elst.Parse(r, length)
+			err := u.ELST.Parse(r, length)
 			if err != nil {
 				return err
 			}

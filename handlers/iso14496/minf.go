@@ -4,9 +4,13 @@ import (
 	"io"
 )
 
-type MINF struct{}
+type MINF struct {
+	VMHD VMHD
+	DINF DINF
+	STBL STBL
+}
 
-func (u *MINF) Parse(r io.ReadSeeker, l int) error {
+func (m *MINF) Parse(r io.ReadSeeker, l int) error {
 	for {
 		length, name, err := GetAtom(r)
 		if err != nil {
@@ -22,20 +26,17 @@ func (u *MINF) Parse(r io.ReadSeeker, l int) error {
 
 		switch string(name) {
 		case "vmhd":
-			vmhd := &VMHD{}
-			err := vmhd.Parse(r, length)
+			err := m.VMHD.Parse(r, length)
 			if err != nil {
 				return err
 			}
 		case "dinf":
-			dinf := &DINF{}
-			err := dinf.Parse(r, length)
+			err := m.DINF.Parse(r, length)
 			if err != nil {
 				return err
 			}
 		case "stbl":
-			stbl := &STBL{}
-			err := stbl.Parse(r, length)
+			err := m.STBL.Parse(r, length)
 			if err != nil {
 				return err
 			}

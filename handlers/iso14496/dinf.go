@@ -3,6 +3,8 @@ package iso14496
 import (
 	"encoding/binary"
 	"io"
+
+	"github.com/pkg/errors"
 )
 
 type DINF struct {
@@ -31,7 +33,7 @@ func (d *DINF) Parse(r io.ReadSeeker, l int) error {
 		&d.DataReference.EntryCount,
 	} {
 		if err := binary.Read(r, binary.BigEndian, i); err != nil {
-			return err
+			return errors.Wrap(err, "Parse")
 		}
 	}
 
